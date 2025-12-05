@@ -1,26 +1,43 @@
 // 0-99 valid numbers
 // rotation with "L" and "R" 
+// Input stayed the same between day 1 and 2
 var inputLines = await File.ReadAllLinesAsync("day1_input.txt");
+// List<string> inputLines = ["L68", "L30", "R48", "L5", "R60", "L55", "L1", "L99", "R14", "L82"];
 var startNumber = 50;
 var result = 0;
+var timesDialPastZero = 0;
+bool rotatingLeft = false;
 foreach (var line in inputLines)
 {
     var direction = line[0];
+    rotatingLeft = direction == 'L';
+
     var steps = int.Parse(line[1..]);
+    timesDialPastZero = steps / 100;
     steps %= 100;
-    if (direction == 'L')
+
+    if (rotatingLeft)
     {
         startNumber -= steps;
-        startNumber = startNumber < 0 ? startNumber + 100 : startNumber;
+        if (startNumber < 0)
+        {
+            startNumber += 100;
+            ++timesDialPastZero;
+        }
     }
-    else
+
+    if (!rotatingLeft)
     {
-        startNumber = (startNumber + steps) % 100;
+        var originalStartNumber = startNumber;
+        var sum = startNumber + steps;
+        startNumber = sum % 100;
+        if (sum >= 100 || originalStartNumber > startNumber)
+        {
+            ++timesDialPastZero;
+        }
     }
-    
-    if (startNumber == 0)
-    {
-        result++;
-    }
+    result += timesDialPastZero;
+
+    timesDialPastZero = 0;
 }
 Console.WriteLine(result);
