@@ -1,8 +1,8 @@
 // Number ID's are given an inclusive range
-// Find the sum of all invalid ID's in range
-// Valid ID = a number IN RANGE that has a TWICE repeating number of number IN RANGE
-// e.g 11-22 = 2 Valid = 11, 22
-// e.g. 95 -115 = 1 Valid = 99
+// Find the sum of all INVALID ID's in range
+// Invalid ID = a number IN RANGE that has a TWICE repeating number of number IN RANGE
+// e.g 11-22 = 2 Invalid = 11, 22
+// e.g. 95 -115 = 1 Invalid = 99
 // valid repeating number can not start with 0
 
 // assumptions: no negative ID numbers
@@ -17,7 +17,7 @@ List<string> input = (await File.ReadAllTextAsync("day2_input.txt"))
                     .Split(",")
                     .ToList();
 
-long result = 0; // Sum of All Valid Numbers in each range
+long result = 0; // Sum of All Invalid Numbers in each range
 
 foreach (var rangeInput in input)
 {
