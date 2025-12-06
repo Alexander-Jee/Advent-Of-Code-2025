@@ -24,10 +24,10 @@ foreach (var rangeInput in input)
     var numbers = rangeInput.Split("-");
     long startNumber = long.Parse(numbers[0]);
     long endNumber = long.Parse(numbers[1]);
-    // var tensPlaces = ValidTensPlace(startNumber, endNumber);
-    // if (tensPlaces.Count == 0) break;
-    // int idxValidTensPlace = 0;
-    // int currentTensPlace = tensPlaces[idxValidTensPlace];
+    var tensPlaces = ValidTensPlace(startNumber, endNumber);
+    if (tensPlaces.Count == 0) break;
+    int idxValidTensPlace = 0;
+    long currentTensPlace = tensPlaces[idxValidTensPlace];
 
     for (long numInRange = startNumber; numInRange <= endNumber; numInRange++)
     {
@@ -53,19 +53,21 @@ static bool IsIdValid(long id)
     return false;
 }
 
-// most likely unnecessary
-static List<int> ValidTensPlace(int startNumber, int endNumber)
+static List<long> ValidTensPlace(long startNumber, long endNumber)
 {
     var exponent = 1;
     
-    List<int> result = [];
+    List<long> result = [];
 
     var tensPlace = Math.Pow(10, exponent);
 
-    while (tensPlace >= startNumber || tensPlace <= endNumber)
+    while (tensPlace <= endNumber)
     {
-        result.Add((int) tensPlace);
-        exponent += 2;
+        if (tensPlace >= startNumber)
+        {
+            result.Add((long) tensPlace);
+            exponent += 2;
+        }
     }
     return result;
 }
