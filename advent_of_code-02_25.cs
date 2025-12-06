@@ -13,7 +13,9 @@ List<string> input =
     "1698522-1698528","446443-446449","38593856-38593862","565653-565659",
     "824824821-824824827","2121212118-2121212124"
 ];
-// List<string> input = [.. (await File.ReadAllTextAsync("day2_input.txt")).Split(",")];
+// List<string> input = (await File.ReadAllTextAsync("day2_input.txt"))
+//                     .Split(",")
+//                     .ToList();
 
 var result = 0; // Sum of All Valid Numbers in each range
 
@@ -25,7 +27,7 @@ foreach (var rangeInput in input)
     var tensPlaces = ValidTensPlace(startNumber, endNumber);
     if (tensPlaces.Count == 0) break;
     int idxValidTensPlace = 0;
-    var currentTensPlace = tensPlaces[idxValidTensPlace];
+    int currentTensPlace = tensPlaces[idxValidTensPlace];
 
     for (int i = startNumber; i <= endNumber && idxValidTensPlace < tensPlaces.Count; i++)
     {
@@ -33,12 +35,19 @@ foreach (var rangeInput in input)
     }
 }
 
-static bool IsIdValid(int number)
+// input only works with ID's with even number of tens places
+static bool IsIdValid(int id)
 {
-
+    var numString = id.ToString();
+    int lenOfRepeatedNum = numString.Length / 2;
+    string firstHalf = numString[lenOfRepeatedNum..];
+    string secondHalf = numString[..lenOfRepeatedNum];
+    
+    if (firstHalf.Equals(secondHalf)) return true;
     return false;
 }
 
+// most likely unnecessary
 static List<int> ValidTensPlace(int startNumber, int endNumber)
 {
     var exponent = 1;
