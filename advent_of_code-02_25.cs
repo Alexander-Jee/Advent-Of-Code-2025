@@ -7,42 +7,48 @@
 
 // assumptions: no negative ID numbers
 
-List<string> input = 
-[
-    "11-22","95-115","998-1012","1188511880-1188511890","222220-222224",
-    "1698522-1698528","446443-446449","38593856-38593862","565653-565659",
-    "824824821-824824827","2121212118-2121212124"
-];
-// List<string> input = (await File.ReadAllTextAsync("day2_input.txt"))
-//                     .Split(",")
-//                     .ToList();
+// List<string> input = 
+// [
+//     "11-22","95-115","998-1012","1188511880-1188511890","222220-222224",
+//     "1698522-1698528","446443-446449","38593856-38593862","565653-565659",
+//     "824824821-824824827","2121212118-2121212124"
+// ];
+List<string> input = (await File.ReadAllTextAsync("day2_input.txt"))
+                    .Split(",")
+                    .ToList();
 
-var result = 0; // Sum of All Valid Numbers in each range
+long result = 0; // Sum of All Valid Numbers in each range
 
 foreach (var rangeInput in input)
 {
     var numbers = rangeInput.Split("-");
-    int startNumber = int.Parse(numbers[0]);
-    int endNumber = int.Parse(numbers[1]);
-    var tensPlaces = ValidTensPlace(startNumber, endNumber);
-    if (tensPlaces.Count == 0) break;
-    int idxValidTensPlace = 0;
-    int currentTensPlace = tensPlaces[idxValidTensPlace];
+    long startNumber = long.Parse(numbers[0]);
+    long endNumber = long.Parse(numbers[1]);
+    // var tensPlaces = ValidTensPlace(startNumber, endNumber);
+    // if (tensPlaces.Count == 0) break;
+    // int idxValidTensPlace = 0;
+    // int currentTensPlace = tensPlaces[idxValidTensPlace];
 
-    for (int i = startNumber; i <= endNumber && idxValidTensPlace < tensPlaces.Count; i++)
+    for (long numInRange = startNumber; numInRange <= endNumber; numInRange++)
     {
-        
+        if (IsIdValid(numInRange))
+        {
+            result += numInRange;
+        }
     }
 }
 
+Console.WriteLine(result);
+
 // input only works with ID's with even number of tens places
-static bool IsIdValid(int id)
+static bool IsIdValid(long id)
 {
     var numString = id.ToString();
+    if (numString.Length % 2 != 0) return false;
     int lenOfRepeatedNum = numString.Length / 2;
     string firstHalf = numString[lenOfRepeatedNum..];
     string secondHalf = numString[..lenOfRepeatedNum];
-    
+
     if (firstHalf.Equals(secondHalf)) return true;
     return false;
 }
