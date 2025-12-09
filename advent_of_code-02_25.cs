@@ -9,7 +9,8 @@
 
 // List<string> input = 
 // [
-//     "11-22","95-115","998-1012","1188511880-1188511890","222220-222224",
+//     "95-115"
+//     ,"11-22","998-1012","1188511880-1188511890","222220-222224",
 //     "1698522-1698528","446443-446449","38593856-38593862","565653-565659",
 //     "824824821-824824827","2121212118-2121212124"
 // ];
@@ -24,50 +25,53 @@ foreach (var rangeInput in input)
     var numbers = rangeInput.Split("-");
     long startNumber = long.Parse(numbers[0]);
     long endNumber = long.Parse(numbers[1]);
-    var tensPlaces = ValidTensPlace(startNumber, endNumber);
-    if (tensPlaces.Count == 0) break;
-    int idxValidTensPlace = 0;
-    long currentTensPlace = tensPlaces[idxValidTensPlace];
-
     for (long numInRange = startNumber; numInRange <= endNumber; numInRange++)
     {
-        if (IsIdValid(numInRange))
+        if (IsIdInvalid(numInRange))
         {
             result += numInRange;
+            // Console.WriteLine(numInRange + " has been added to sum");
         }
     }
 }
 
 Console.WriteLine(result);
 
-// input only works with ID's with even number of tens places
-static bool IsIdValid(long id)
+static bool IsIdInvalid(long id)
 {
     var numString = id.ToString();
-    if (numString.Length % 2 != 0) return false;
-    int lenOfRepeatedNum = numString.Length / 2;
-    string firstHalf = numString[lenOfRepeatedNum..];
-    string secondHalf = numString[..lenOfRepeatedNum];
-
-    if (firstHalf.Equals(secondHalf)) return true;
-    return false;
-}
-
-static List<long> ValidTensPlace(long startNumber, long endNumber)
-{
-    var exponent = 1;
-    
-    List<long> result = [];
-
-    var tensPlace = Math.Pow(10, exponent);
-
-    while (tensPlace <= endNumber)
+    bool result = false;
+    for (int lenOfRepeatNum = 1; lenOfRepeatNum < numString.Length; lenOfRepeatNum++)
     {
-        if (tensPlace >= startNumber)
+        var partIsRepeated = true;
+        // Length of ID = n
+        // check from 1 to n/2 is a valid size to be split into multiple parts
+        if (numString.Length % lenOfRepeatNum == 0)
         {
-            result.Add((long) tensPlace);
-            exponent += 2;
+            var repeatedNum = numString[..lenOfRepeatNum];
+            var totalNumOfParts = numString.Length / lenOfRepeatNum;
+            // Console.WriteLine(id);
+            for (int orderOfPart = 0; orderOfPart < totalNumOfParts; orderOfPart++)
+            {
+                var startIdx = lenOfRepeatNum * orderOfPart;
+                var endIdx = lenOfRepeatNum * (orderOfPart + 1);
+                var nextNum = numString[startIdx..endIdx];
+                // Console.Write("firstPart: {0} futureParts: {1} \n", repeatedNum, nextNum);
+                if (!repeatedNum.Equals(nextNum))
+                {
+                    // Console.WriteLine("Id: {0} did not have an Invalid ID", id);
+                    partIsRepeated = false;
+                    break;
+                }
+            }
         }
+        else
+        {
+            partIsRepeated = false;
+        }
+        result = partIsRepeated;
+
+        if (result) break;
     }
     return result;
 }
