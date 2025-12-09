@@ -18,7 +18,7 @@ List<string> input = (await File.ReadAllTextAsync("day2_input.txt"))
                     .Split(",")
                     .ToList();
 
-long result = 0; // Sum of All Invalid Numbers in each range
+long sumOfInvalidIds = 0;
 
 foreach (var rangeInput in input)
 {
@@ -29,13 +29,13 @@ foreach (var rangeInput in input)
     {
         if (IsIdInvalid(numInRange))
         {
-            result += numInRange;
+            sumOfInvalidIds += numInRange;
             // Console.WriteLine(numInRange + " has been added to sum");
         }
     }
 }
 
-Console.WriteLine(result);
+Console.WriteLine(sumOfInvalidIds);
 
 static bool IsIdInvalid(long id)
 {
@@ -44,8 +44,6 @@ static bool IsIdInvalid(long id)
     for (int lenOfRepeatNum = 1; lenOfRepeatNum < numString.Length; lenOfRepeatNum++)
     {
         var partIsRepeated = true;
-        // Length of ID = n
-        // check from 1 to n/2 is a valid size to be split into multiple parts
         if (numString.Length % lenOfRepeatNum == 0)
         {
             var repeatedNum = numString[..lenOfRepeatNum];
